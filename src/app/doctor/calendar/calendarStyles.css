@@ -1,0 +1,16 @@
+
+.fc .fc-button {
+  background-color: #3b82f6 !important; /* Blue */
+  border: none !important;
+  color: white !important;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.fc .fc-button:hover {
+  background-color: #2563eb !important; /* Darker Blue */
+}
+
+.fc .fc-button-active {
+  background-color: #1d4ed8 !important; /* Active button */
+}

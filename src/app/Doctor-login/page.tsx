@@ -28,7 +28,8 @@ export default function DoctorAuthPage() {
         return;
       }
 
-      router.push('/doctor-dashboard');
+      router.push('/doctor/dashboard');
+
     } else {
       // ---- SIGNUP ----
       const { data, error } = await supabase.auth.signUp({
@@ -65,7 +66,8 @@ export default function DoctorAuthPage() {
       }
 
       alert('Signup successful!');
-      router.push('/doctor-dashboard');
+      router.push('/doctor/dashboard');
+
     }
   };
 
