@@ -14,3 +14,38 @@
 .fc .fc-button-active {
   background-color: #1d4ed8 !important; /* Active button */
 }
+.tippy-box[data-theme~='modern'] {
+  background-color: #ffffff;
+  color: #333;
+  border-radius: 8px; /* Rounded rectangle */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  font-size: 14px;
+   width: 200px;
+  
+}
+
+.tippy-box[data-theme~='modern'] strong {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.tippy-box[data-theme~='modern'] button {
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.tippy-box[data-theme~='modern'] .cancel-btn {
+  background-color: #ef4444; /* Tailwind red-500 */
+  color: white;
+}
+
+.tippy-box[data-theme~='modern'] .delete-btn {
+  background-color: #000;
+  color: white;
+}

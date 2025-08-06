@@ -149,47 +149,43 @@ export default function CalendarPage() {
           const status = info.event.extendedProps.status;
 
           // Tooltip with Cancel & Delete for Cancelled
-          tippy(info.el, {
-            content: `
-              <div style="text-align:left;">
-                <strong>${title}</strong><br/>
-                Status: ${status}<br/>
-                Date: ${info.event.startStr}<br/>
-                ${
-                  status === 'Cancelled'
-                    ? `<button id="delete-${id}" 
-                        style="margin-top:5px;background:black;color:white;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;">
-                        ❌ Delete
-                      </button>`
-                    : `<button id="cancel-${id}" 
-                        style="margin-top:5px;background:red;color:white;padding:2px 6px;border:none;border-radius:3px;cursor:pointer;">
-                        Cancel
-                      </button>`
-                }
-              </div>
-            `,
-            allowHTML: true,
-            interactive: true,
-            onShown(instance) {
-              if (status === 'Cancelled') {
-                const deleteBtn = document.getElementById(`delete-${id}`);
-                if (deleteBtn) {
-                  deleteBtn.addEventListener('click', () => {
-                    handleDelete(id);
-                    instance.hide();
-                  });
-                }
-              } else {
-                const cancelBtn = document.getElementById(`cancel-${id}`);
-                if (cancelBtn) {
-                  cancelBtn.addEventListener('click', () => {
-                    handleCancel(id);
-                    instance.hide();
-                  });
-                }
-              }
-            },
-          });
+         tippy(info.el, {
+  content: `
+    <div>
+      <strong>${title}</strong>
+      Status: ${status}<br/>
+      Date: ${info.event.startStr}<br/>
+      ${
+        status === 'Cancelled'
+          ? `<button id="delete-${id}" class="delete-btn">❌ Delete</button>`
+          : `<button id="cancel-${id}" class="cancel-btn">Cancel</button>`
+      }
+    </div>
+  `,
+  allowHTML: true,
+  interactive: true,
+  theme: 'modern', // Apply custom theme
+  onShown(instance) {
+    if (status === 'Cancelled') {
+      const deleteBtn = document.getElementById(`delete-${id}`);
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => {
+          handleDelete(id);
+          instance.hide();
+        });
+      }
+    } else {
+      const cancelBtn = document.getElementById(`cancel-${id}`);
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+          handleCancel(id);
+          instance.hide();
+        });
+      }
+    }
+  },
+});
+
         }}
       />
     </div>

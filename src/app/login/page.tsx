@@ -44,7 +44,7 @@ export default function PatientAuthPage() {
         return;
       }
 
-      router.push('/book');
+      router.push('/home');
     } else {
       // ---- SIGNUP ----
       const { data: signupData, error: signupError } = await supabase.auth.signUp({
