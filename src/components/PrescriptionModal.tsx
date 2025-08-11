@@ -1,11 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
-import Modal from './Modal';
+
+import { X } from 'lucide-react';
+
 
 interface PrescriptionModalProps {
   appointmentId: string;
   patientName: string;
+  doctorName:string;
   mode: 'add' | 'edit';
   onClose: () => void;
 }
@@ -20,9 +23,21 @@ export default function PrescriptionModal({
   const [dosage, setDosage] = useState('');
   const [duration, setDuration] = useState('');
   const [notes, setNotes] = useState('');
-
-  // **Load existing prescription when editing**
+  const [patientId, setPatientId] = useState<string | null>(null);
   useEffect(() => {
+
+      supabase
+    .from("appointmentlist")
+    .select("patient_id")
+    .eq("id", appointmentId)
+    .single()
+    .then(({ data, error }) => {
+      if (error) {
+        console.error("Error fetching patient_id:", error);
+      } else {
+        setPatientId(data?.patient_id || null);
+      }
+    });
     if (mode === 'edit') {
       supabase
         .from('prescriptions')
@@ -43,43 +58,52 @@ export default function PrescriptionModal({
   }, [mode, appointmentId]);
 
   // Save or update prescription
-  const handleSave = async () => {
-    try {
-      let response;
-      if (mode === 'add') {
-        response = await supabase.from('prescriptions').insert([
-          {
-            appointment_id: appointmentId,
-            medicine_name: medicineName,
-            dosage,
-            duration,
-            notes,
-          },
-        ]);
-      } else {
-        response = await supabase
-          .from('prescriptions')
-          .update({
-            medicine_name: medicineName,
-            dosage,
-            duration,
-            notes,
-          })
-          .eq('appointment_id', appointmentId);
-      }
+ const handleSave = async () => {
+  try {
+    let response;
 
-      console.log('Supabase response:', response);
-
-      if (response.error) {
-        alert(`Error: ${response.error.message}`);
+    if (mode === 'add') {
+      if (!patientId) {
+        alert("Patient ID not found. Cannot save prescription.");
         return;
       }
 
-      onClose();
-    } catch (error) {
-      console.error('Error saving prescription:', error);
+      response = await supabase.from('prescriptions').insert([
+  {
+    appointment_id: appointmentId,
+    patient_id: patientId,
+    doctor_name: "Raj singh", // ✅ add this line
+    medicine_name: medicineName,
+    dosage,
+    duration,
+    notes,
+  },
+]);
+    } else {
+      response = await supabase
+        .from('prescriptions')
+        .update({
+          medicine_name: medicineName,
+          dosage,
+          duration,
+          notes,
+        })
+        .eq('appointment_id', appointmentId);
     }
-  };
+
+    console.log('Supabase response:', response);
+
+    if (response.error) {
+      alert(`Error: ${response.error.message}`);
+      return;
+    }
+
+    onClose();
+  } catch (error) {
+    console.error('Error saving prescription:', error);
+  }
+};
+
 
   // Delete prescription
   const handleDelete = async () => {
@@ -94,11 +118,24 @@ export default function PrescriptionModal({
   };
 
   return (
-    <Modal
-      title={`${mode === 'edit' ? 'Edit' : 'Add'} Prescription for ${patientName}`}
-      onClose={onClose}
-    >
+     <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+      <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md relative">
+        {/* Close Icon */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-red-600"
+        >
+          <X size={20} />
+        </button>
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          {mode === 'add' ? 'Add Prescription' : 'Edit Prescription'}
+        </h2>
+
       <div className="space-y-3">
+        <div>
+              <label className="block text-sm font-medium text-gray-700">Doctor Name : <span className="text-blue-500 font-bold">Raj Singh</span></label>
+             
+            </div>
         <input
           type="text"
           placeholder="Medicine Name"
@@ -144,14 +181,10 @@ export default function PrescriptionModal({
           >
             Save
           </button>
-          <button
-            onClick={onClose}
-            className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-          >
-            Cancel
-          </button>
+          
         </div>
       </div>
-    </Modal>
+    </div>
+    </div>
   );
 }

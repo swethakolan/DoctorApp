@@ -23,7 +23,7 @@ export default function CalendarPage() {
   useEffect(() => {
     fetchAppointments();
 
-    // Real-time Sync
+    
     const channel = supabase
       .channel('appointments-changes')
       .on(
@@ -94,7 +94,7 @@ export default function CalendarPage() {
   return (
     <div>
 
-      {/* Dropdown Filter */}
+      
       <div className="mb-6">
         <label className="mr-3 font-semibold">Filter by Status:</label>
         <select
@@ -148,7 +148,7 @@ export default function CalendarPage() {
           const { title, id } = info.event;
           const status = info.event.extendedProps.status;
 
-          // Tooltip with Cancel & Delete for Cancelled
+         
          tippy(info.el, {
   content: `
     <div>
@@ -164,7 +164,7 @@ export default function CalendarPage() {
   `,
   allowHTML: true,
   interactive: true,
-  theme: 'modern', // Apply custom theme
+  theme: 'modern',
   onShown(instance) {
     if (status === 'Cancelled') {
       const deleteBtn = document.getElementById(`delete-${id}`);

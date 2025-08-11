@@ -112,7 +112,7 @@ export default function DoctorProfilePage() {
           />
         </div>
 
-        {/* Update Button */}
+       
         <div className="mt-6">
           <button
             onClick={handleUpdate}
@@ -122,29 +122,14 @@ export default function DoctorProfilePage() {
           </button>
         </div>
 
-        {/* Success Card */}
+        
         {showSuccess && (
           <div className="fixed top-5 right-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg animate-slide-in">
             Profile Updated Successfully!
           </div>
         )}
 
-        {/* Floating Card Animation */}
-        <style jsx>{`
-          @keyframes slide-in {
-            from {
-              transform: translateX(100%);
-              opacity: 0;
-            }
-            to {
-              transform: translateX(0);
-              opacity: 1;
-            }
-          }
-          .animate-slide-in {
-            animation: slide-in 0.5s ease-out;
-          }
-        `}</style>
+        
       </div>
     </div>
   );

@@ -27,49 +27,69 @@ export default function AppointmentsPage() {
     patient: string;
     mode: 'add' | 'edit';
   } | null>(null);
+   const [doctorName, setDoctorName] = useState('');
 
-  // Fetch appointments along with prescription info
-  const fetchAppointments = async () => {
-    try {
-      // Get doctor ID (replace with actual logged-in doctor logic if needed)
-      const { data: doctorProfile } = await supabase
-        .from('doctorslist')
-        .select('id')
-        .eq('name', 'Dr. Raj Singh')
-        .single();
-      if (!doctorProfile) return;
+ 
+const fetchAppointments = async () => {
+  try {
+    const { data: doctorProfile } = await supabase
+      .from('doctorslist')
+      .select('id, name') 
+      .eq('name', 'Dr. Raj Singh')
+      .single();
 
-      // Fetch appointments for this doctor
-      const { data: appts } = await supabase
-        .from('appointmentlist')
-        .select('id, patient_name, date, time, status')
-        .eq('doctor_id', doctorProfile.id);
+    if (!doctorProfile) return;
 
-      // Fetch prescriptions and map appointment IDs
-      const { data: prescs } = await supabase.from('prescriptions').select('appointment_id');
-      const prescribedIds = prescs?.map((p) => p.appointment_id) || [];
+    setDoctorName(doctorProfile.name);
 
-      // Combine data
-      setAppointments(
-        (appts || []).map((a) => ({
-          ...a,
-          hasPrescription: prescribedIds.includes(a.id),
-        }))
-      );
-    } catch (err) {
-      console.error('Error fetching appointments:', err);
-    }
-  };
+    
+    const { data: appts } = await supabase
+      .from('appointmentlist')
+      .select('id, patient_name, date, time, status')
+      .eq('doctor_id', doctorProfile.id);
+
+    // Fetch prescriptions
+    const { data: prescs } = await supabase
+      .from('prescriptions')
+      .select('appointment_id');
+
+    const prescribedIds = prescs?.map((p) => p.appointment_id) || [];
+
+    // Merge prescription info
+    setAppointments(
+      (appts || []).map((a) => ({
+        ...a,
+        hasPrescription: prescribedIds.includes(a.id),
+      }))
+    );
+  } catch (err) {
+    console.error('Error fetching appointments:', err);
+  }
+};
 
   useEffect(() => {
     fetchAppointments();
 
     // Listen for real-time changes
     const channel = supabase
-      .channel('appointments-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'appointmentlist' }, fetchAppointments)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'prescriptions' }, fetchAppointments)
-      .subscribe();
+  .channel('appointments-changes')
+  .on(
+    'postgres_changes',
+    { event: '*', schema: 'public', table: 'appointmentlist' },
+    (payload) => {
+      console.log('Appointmentlist changed:', payload);
+      fetchAppointments();
+    }
+  )
+  .on(
+    'postgres_changes',
+    { event: '*', schema: 'public', table: 'prescriptions' },
+    (payload) => {
+      console.log('Prescriptions changed:', payload);
+      fetchAppointments();
+    }
+  )
+  .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
@@ -222,14 +242,15 @@ export default function AppointmentsPage() {
       {/* Prescription Modal */}
       {prescriptionModal && (
         <PrescriptionModal
-          appointmentId={prescriptionModal.id}
-          patientName={prescriptionModal.patient}
-          mode={prescriptionModal.mode}
-          onClose={() => {
-            setPrescriptionModal(null);
-            fetchAppointments();
-          }}
-        />
+  appointmentId={prescriptionModal.id}
+  patientName={prescriptionModal.patient}
+  doctorName="Raj singh"
+  mode={prescriptionModal.mode}
+  onClose={() => {
+    setPrescriptionModal(null);
+    fetchAppointments(); 
+  }}
+/>
       )}
     </div>
   );

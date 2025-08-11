@@ -73,77 +73,85 @@ export default function BookAppointment() {
 
     fetchData();
   }, [doctorId, isReschedule, rescheduleId]);
+  
 
-  const handleBooking = async () => {
-    if (!selectedTime) {
-      setErrorMessage("Please select a time slot.");
+const handleBooking = async () => {
+  if (!selectedTime) {
+    setErrorMessage("Please select a time slot.");
+    return;
+  }
+
+  setSubmitting(true);
+  setErrorMessage("");
+
+  try {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      setErrorMessage("User not logged in.");
       return;
     }
 
-    setSubmitting(true);
-    setErrorMessage("");
+    const patientId = user.id;
+    const patientName = "John Sharma"; 
 
-    try {
-      // RESCHEDULE FLOW
-      if (isReschedule && rescheduleId) {
-        const { error } = await supabase
-          .from("appointmentlist")
-          .update({
-            date: format(selectedDate, "yyyy-MM-dd"),
-            time: selectedTime,
-            status: "Rescheduled",
-          })
-          .eq("id", rescheduleId);
-
-        if (error) throw new Error(error.message);
-
-        router.push(`/success?rescheduled=true`);
-        return;
-      }
-
-      // NEW BOOKING FLOW
-      if (!doctor) {
-        setErrorMessage("Doctor not found.");
-        return;
-      }
-
-      // Double-booking check
-      const { data: existing } = await supabase
+   
+    if (isReschedule && rescheduleId) {
+      const { error } = await supabase
         .from("appointmentlist")
-        .select("id")
-        .eq("doctor_id", doctor.id)
-        .eq("date", format(selectedDate, "yyyy-MM-dd"))
-        .eq("time", selectedTime);
-
-      if (existing && existing.length > 0) {
-        setErrorMessage("This slot is already booked. Please select another time.");
-        return;
-      }
-
-      // Placeholder patient name (replace with Supabase Auth later)
-      const patientName = "Priya Sharma";
-
-      const { error } = await supabase.from("appointmentlist").insert([
-        {
-          doctor_id: doctor.id,
-          patient_name: patientName,
+        .update({
           date: format(selectedDate, "yyyy-MM-dd"),
           time: selectedTime,
-          status: "Scheduled",
-        },
-      ]);
+          status: "Rescheduled",
+        })
+        .eq("id", rescheduleId);
 
       if (error) throw new Error(error.message);
 
-      router.push(
-        `/success?name=${encodeURIComponent(doctor.name)}&date=${format(selectedDate, "PPP")}&time=${selectedTime}`
-      );
-    } catch (err: any) {
-      setErrorMessage(err.message || "Failed to process booking");
-    } finally {
-      setSubmitting(false);
+      router.push(`/success?rescheduled=true`);
+      return;
     }
-  };
+    if (!doctor) {
+      setErrorMessage("Doctor not found.");
+      return;
+    }
+    const { data: existing } = await supabase
+      .from("appointmentlist")
+      .select("id")
+      .eq("doctor_id", doctor.id)
+      .eq("date", format(selectedDate, "yyyy-MM-dd"))
+      .eq("time", selectedTime);
+
+    if (existing && existing.length > 0) {
+      setErrorMessage("This slot is already booked. Please select another time.");
+      return;
+    }
+    const { error } = await supabase.from("appointmentlist").insert([
+      {
+        doctor_id: doctor.id,
+        patient_id: patientId,
+        patient_name: patientName,
+        date: format(selectedDate, "yyyy-MM-dd"),
+        time: selectedTime,
+        status: "Scheduled",
+      },
+    ]);
+
+    if (error) throw new Error(error.message);
+
+    router.push(
+      `/success?name=${encodeURIComponent(doctor.name)}&date=${format(selectedDate, "PPP")}&time=${selectedTime}`
+    );
+  } catch (err: any) {
+    setErrorMessage(err.message || "Failed to process booking");
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   if (loading) return <div className="p-4 text-center">Loading...</div>;
   if (!doctor && !isReschedule) return <div className="p-4 text-center">Doctor not found.</div>;

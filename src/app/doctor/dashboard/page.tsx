@@ -63,7 +63,7 @@ export default function DashboardPage() {
     },
   ];
 
-  const COLORS = ['#3b82f6', '#10b981', '#ef4444', '#f59e0b']; // Blue, Green, Red, Yellow
+  const COLORS = ['#3b82f6', '#10b981', '#ef4444', '#f59e0b']; 
   const CARD_COLORS = [
     'bg-blue-500',
     'bg-green-500',
@@ -77,7 +77,7 @@ export default function DashboardPage() {
         Welcome, {doctorName || 'Doctor'}
       </h1>
 
-      {/* Cards Section */}
+      
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
         {statusCounts.map((stat, i) => (
           <div
@@ -90,9 +90,7 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Charts Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Pie Chart */}
         <div className="bg-white p-6 rounded-xl shadow-lg">
           <h2 className="text-lg font-semibold mb-4 text-gray-700">
             Appointments Overview
@@ -116,8 +114,6 @@ export default function DashboardPage() {
             </PieChart>
           </ResponsiveContainer>
         </div>
-
-        {/* Bar Chart */}
         <div className="bg-white p-6 rounded-xl shadow-lg">
           <h2 className="text-lg font-semibold mb-4 text-gray-700">
             Appointments by Status

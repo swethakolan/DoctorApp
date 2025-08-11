@@ -1,7 +1,7 @@
 'use client';
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
-import { FaSearch, FaCalendarAlt, FaHospitalAlt } from 'react-icons/fa';
+import { FaSearch, FaCalendarAlt, FaHospitalAlt, FaFileMedical } from 'react-icons/fa';
 import Link from 'next/link';
 
 export default function HomePage() {
@@ -20,15 +20,19 @@ export default function HomePage() {
           Book appointments with trusted professionals
         </h2>
         <p className="text-gray-700 mb-6">Fast, simple & secure</p>
-       <motion.div
- 
->
-  <Link href="/book">
-    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">
-      Book Now
-    </button>
-  </Link>
-</motion.div>
+        <motion.div className="flex flex-row min-h-0 justify-center items-center gap-4">
+          <Link href="/book">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">
+              Book Now
+            </button>
+          </Link>
+          <Link href="/prescriptions">
+            <button className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-medium text-center">
+              <FaFileMedical />
+              View Prescriptions
+            </button>
+          </Link>
+        </motion.div>
       </motion.section>
 
       {/* Features Section */}
@@ -63,6 +67,8 @@ export default function HomePage() {
           />
         </motion.div>
       </section>
+
+     
     </div>
   );
 }

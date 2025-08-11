@@ -1,6 +1,6 @@
 
 .fc .fc-button {
-  background-color: #3b82f6 !important; /* Blue */
+  background-color: #3b82f6 !important; 
   border: none !important;
   color: white !important;
   font-weight: 600;
@@ -8,16 +8,16 @@
 }
 
 .fc .fc-button:hover {
-  background-color: #2563eb !important; /* Darker Blue */
+  background-color: #2563eb !important; 
 }
 
 .fc .fc-button-active {
-  background-color: #1d4ed8 !important; /* Active button */
+  background-color: #1d4ed8 !important; 
 }
 .tippy-box[data-theme~='modern'] {
   background-color: #ffffff;
   color: #333;
-  border-radius: 8px; /* Rounded rectangle */
+  border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 10px;
   font-size: 14px;
@@ -41,7 +41,7 @@
 }
 
 .tippy-box[data-theme~='modern'] .cancel-btn {
-  background-color: #ef4444; /* Tailwind red-500 */
+  background-color: #ef4444; 
   color: white;
 }
 

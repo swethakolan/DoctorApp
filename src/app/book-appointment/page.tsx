@@ -1,7 +1,7 @@
 // app/book-appointment/page.tsx
 
 import { Suspense } from "react";
-import BookAppointment from "@/components/BookAppointment"; // Update the path if needed
+import BookAppointment from "@/components/BookAppointment"; 
 
 export default function BookAppointmentPage() {
   return (
