@@ -6,8 +6,6 @@ import { usePathname } from 'next/navigation';
 
 export default function DoctorLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-
-  // Function to highlight active link
   const isActive = (path: string) => pathname.startsWith(path);
 
   return (

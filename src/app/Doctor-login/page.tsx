@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Borel } from 'next/font/google';
+
 
 export default function DoctorAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -41,8 +41,6 @@ export default function DoctorAuthPage() {
         alert(error.message);
         return;
       }
-
-      // Insert doctor profile into doctorslist
       const user = data.user;
       if (user) {
         const { error: insertError } = await supabase.from('doctorslist').insert([
