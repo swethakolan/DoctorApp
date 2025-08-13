@@ -12,6 +12,7 @@ interface Prescription {
 
 interface PrescriptionModalProps {
   appointmentId: string;
+  patientId: string;
   patientName: string;
   doctorName: string;
   mode: 'view';
@@ -20,6 +21,7 @@ interface PrescriptionModalProps {
 
 export default function PrescriptionModal({
   appointmentId,
+  patientId,
   patientName,
   doctorName,
   onClose,
@@ -71,6 +73,7 @@ export default function PrescriptionModal({
     const { error } = await supabase.from('prescriptions').insert([
       {
         appointment_id: appointmentId,
+         patient_id: patientId,  
         doctor_name: doctorName,
         medicine_name: newMedicineName,
         dosage: newDosage,

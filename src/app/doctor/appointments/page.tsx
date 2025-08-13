@@ -30,6 +30,7 @@ export default function AppointmentsPage() {
 
   const [prescriptionModal, setPrescriptionModal] = useState<{
     id: string;
+     patientId: string; 
     patientName: string;
   } | null>(null);
 
@@ -242,6 +243,7 @@ export default function AppointmentsPage() {
                 onClick={() =>
                   setPrescriptionModal({
                     id: app.id,
+                    patientId: app.patient_id,
                     patientName: app.patient_name,
                   })
                 }
@@ -255,17 +257,18 @@ export default function AppointmentsPage() {
 
       {/* Prescription Modal */}
       {prescriptionModal && (
-        <PrescriptionModal
-          appointmentId={prescriptionModal.id}
-          patientName={prescriptionModal.patientName}
-          doctorName={doctorName}
-          mode="view"
-          onClose={() => {
-            setPrescriptionModal(null);
-            fetchAppointments();
-          }}
-        />
-      )}
+  <PrescriptionModal
+    appointmentId={prescriptionModal.id}
+    patientId={prescriptionModal.patientId}  
+    patientName={prescriptionModal.patientName}
+    doctorName={doctorName}
+    mode="view"
+    onClose={() => {
+      setPrescriptionModal(null);
+      fetchAppointments();
+    }}
+  />
+)}
 
       {/* Medical History Modal */}
      {medicalHistoryModal && (
