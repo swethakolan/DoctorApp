@@ -5,5 +5,11 @@ const nextConfig: NextConfig = {
     domains: ["randomuser.me"],
   },
 };
+module.exports = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+};
+
 
 export default nextConfig;

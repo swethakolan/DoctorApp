@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { format, addDays } from "date-fns";
 import { supabase } from "@/lib/supabase";
 import Navbar from "./Navbar";
+import Image from "next/image";
 
 const timeSlots = [
   "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
@@ -163,7 +164,7 @@ const handleBooking = async () => {
       <div className="w-full max-w-md bg-white rounded-xl shadow-md p-4 text-black">
         {!isReschedule && doctor && (
           <div className="flex items-center gap-4 mb-4">
-            <img
+            <Image
               src={doctor.photo || "/default-doctor.png"}
               alt={doctor.name}
               className="w-16 h-16 rounded-full object-cover"

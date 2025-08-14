@@ -6,7 +6,7 @@ import { HiHome, HiUserGroup } from 'react-icons/hi';
 import { FaCalendarCheck, FaSignOutAlt, FaUser,FaFileMedical } from 'react-icons/fa';
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  
   const pathname = usePathname(); 
 
   const linkClasses = (path: string) =>
