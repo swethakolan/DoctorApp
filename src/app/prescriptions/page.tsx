@@ -35,6 +35,12 @@ export default function PrescriptionsPage() {
   const [loading, setLoading] = useState(true);
  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 const [selectedPrescription, setSelectedPrescription] = useState<Prescription | null>(null);
+ const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const showToast = (message: string) => {
+    setToastMessage(message);
+    setTimeout(() => setToastMessage(null), 3000); // Hide after 3s
+  };
+
 
   const [reviews, setReviews] = useState<Review[]>([]);
  
@@ -94,7 +100,7 @@ const [selectedPrescription, setSelectedPrescription] = useState<Prescription | 
     ]);
 
     if (!error) {
-      alert('Review submitted!');
+      showToast('Review submitted successfully ✅'); // ✅ Show token instead of alert
       setReviews((prev) => [
         {
           id: Math.random().toString(),
